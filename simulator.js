@@ -2,10 +2,11 @@ export class Simulator {
     constructor (height, length) {
         this._height = height;
         this._length = length;
+        //example cells => {"1":{"2":"#ff0000", "4":"#ff0000"}} => meaning 2 cells, one on line 1 column 2, the other on line 1 column 4
         this._cells = {};
     }
     simulate () {
-        let modList = [];
+        const modList = [];
         
     }
 }
