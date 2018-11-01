@@ -9,7 +9,7 @@ export class Simulator {
         const modList = [];
         
     }
-    push (line, column, colour) {
+    add (line, column, colour) {
         const cells = this._cells;
         if (typeof cells[line] === 'undefined') cells[line] = {};
         cells[line][column] = colour;
