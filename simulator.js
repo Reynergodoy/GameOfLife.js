@@ -9,4 +9,12 @@ export class Simulator {
         const modList = [];
         
     }
+    push (line, column, colour) {
+        const cells = this._cells;
+        if (typeof cells[line] === 'undefined') cells[line] = {};
+        cells[line][column] = colour;
+    }
+    delete (line, column) {
+        if (typeof this._cells[line] !== 'undefined' & typeof this._cells[line][column] !== 'undefined') delete this._cells[line][column];
+    }
 }
