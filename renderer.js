@@ -36,7 +36,8 @@ class GameOfLife extends Simulator{
     outputLog(){
         const now = new Date().getTime();
         const fps = this._timestamps.filter(time=>time > now - 1000).length;
-        this._log.innerHTML = `fps: <b>${fps}</b>`;
+        const cellCount = JSON.stringify(app._cells).split('rgb').length;
+        this._log.innerHTML = `fps: <b>${fps}</b> --- cells: ${cellCount}`;
     }
     draw() {
         this._ctx.clearRect(0, 0, this._width, this._height);
