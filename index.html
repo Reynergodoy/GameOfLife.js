@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>GAME OF LIFE</title>
+    <script src="data.js"></script>
+    <script src="entities.js"></script>
+    <script src="src/predetermined/simulator-v2.js"></script>
+    <script src="renderer.js"></script>
+</head>
+<body>
+    <div id="controls">
+        <select id="starting_state" onchange="initialize()">
+            <option>Replicator</option>
+            <option>Turing Machine</option>
+        </select>
+        <span id="log">fps: ...loading...</span><br/>
+    </div>
+    <div id="game">
+        <canvas id="c" style="border: 1px solid black;"></canvas>
+    </div>
+    <script>
+        function initialize(){
+            const startingState = document.querySelector("#starting_state").value;
+            if(window.app){
+                clearInterval(window.app._interval);
+                document.querySelector("#log").innerHTML="fps: ...loading...";
+            }
+            window.app = new GameOfLife({
+                height: 1700,
+                width: 1714,
+                columns: 1714,
+                rows: 1700,
+                speed: 60,
+                canvas: document.querySelector("#c"),
+                log: document.querySelector("#log")
+            });
+            app.addObject(g_data[startingState]);
+            app.start();
+        }
+        initialize();
+    </script>
+</body>
+</html>
