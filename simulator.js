@@ -1,4 +1,4 @@
-export class Simulator {
+export class Simulator { // random colored
     constructor (height, length) {
         this._height = height;
         this._length = length;
