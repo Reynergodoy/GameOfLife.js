@@ -103,7 +103,7 @@ export class Simulator { // colors are predetermined by the highest amount of pa
         let biggest = [0, 0];
         for (let i = 0; i < _tempColorLen; i++) {
             const _value = color[_tempColor[i]];
-            if (biggest[0] < value) biggest = [value, i]
+            if (biggest[0] < _value) biggest = [_value, i]
             continue;
         }
         return [counter, _tempColor[biggest[1]]];
