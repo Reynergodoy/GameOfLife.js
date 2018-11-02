@@ -7,34 +7,35 @@ export class Simulator {
     }
     simulate () {
         const modList = [];
+        const checkedNeighbors = []
         const lines = Object.keys(this._cells);
         const linesLen = lines.length;
         if (linesLen === 0) return;
-        const cellsArray = [];
         for (let i = 0; i < linesLen; i++) {
             const cols = Object.keys(this._cells[lines[i]]);
             const colsLen = cols.length;
             for (let k = 0; k < colsLen; k++) {
                 const counter = this.neighborsCounter(lines[i], cols[k]);
+                if (!this.willLive(counter, true)) modList.push([`${lines[i]} ${cols[k]}`, "delete"]);
             }
         }
         return modList;
     }
     add (line, column, colour) {
         const cells = this._cells;
-        if (typeof cells[line] === 'undefined') cells[line] = {};
+        if (typeof cells[line] === "undefined") cells[line] = {};
         cells[line][column] = colour;
     }
     delete (line, column) {
-        if (typeof this._cells[line] !== 'undefined')
-            if (typeof this._cells[line][column] !== 'undefined') delete this._cells[line][column];
+        if (typeof this._cells[line] !== "undefined")
+            if (typeof this._cells[line][column] !== "undefined") delete this._cells[line][column];
     }
     update (data) {
         
     }
     isAlive (line, column) {
-        if (typeof this._cells[line] !== 'undefined')
-            if(typeof this._cells[line][column] !== 'undefined') return true;
+        if (typeof this._cells[line] !== "undefined")
+            if(typeof this._cells[line][column] !== "undefined") return true;
         return false;
     }
     neighborsCounter (line, column) {
@@ -49,7 +50,23 @@ export class Simulator {
         if (this.isAlive(line+1, column+1)) counter++;
         return counter;
     }
-    willLive(counter, living) {
+    checkNeighbors (line, column, checked, list) {
+        const points = [[line-1, column-1], [line-1, column], [line-1, column+1],
+                      [line, column-1]  , ----------------  [line, column+1],
+                      [line+1, column-1], [line+1, column], [line+1, column+1]];
+        const _length = this._length;
+        const _height = this._height;
+        for (let i = 0; i < 8; i++) {
+            const point = points[i];
+            if (checked.indexOf(point[0] + " " + point[1])) continue;
+            checked.push(point[0] + " " + point[1]);
+            if (this.isAlive(point[0], point[1])) continue;
+            if (!this.willLive(this.neighborsCounter(point[0], point[1]), false)) continue;
+            if (point[0] < 0 || point[1] < 0 || point[0] >= _length || point[1] >= _height) continue;
+            list.push([point[0] + " " + point[1],'delete', '#d3d3d3'])
+        }
+    }
+    willLive (counter, living) {
         if (living) {
             if (counter === 2 || counter === 3) return true;
             return false;
