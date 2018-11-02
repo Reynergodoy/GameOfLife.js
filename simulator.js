@@ -36,10 +36,10 @@ export class Simulator {
         for(let i = 0; i < len; i++) {
             const instructions = data[i];
             const coords = instructions[0].split(" ");
-            if (i[1] === "delete") {
+            if (instructions[1] === "delete") {
                 this.delete(coords[0], coords[1]);
                 continue;
-            } else if (i[1] === "add"){
+            } else if (instructions[1] === "add"){
                 this.add(coords[0], coords[1], instructions[2]);
                 continue;
             }
