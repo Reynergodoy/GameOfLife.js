@@ -89,16 +89,17 @@ export class Simulator { // colors are predetermined by the highest amount of pa
             let point = points[i];
             if (this.isAlive(point[0], point[1])) {
                 const _temp = this.getColor(point[0], point[1]);
-            if (typeof color[_temp] === undefined) {
-                color[_temp] = 1;
-            } else {
-                color[_temp]++;
-            }
-            counter++;
+                if (typeof color[_temp] === undefined) {
+                    color[_temp] = 1;
+                } else {
+                    color[_temp]++;
+                }
+                counter++;
             }
         }
         const _tempColor = Object.keys(color);
         const _tempColorLen = _tempColor.length;
+        if (_tempColorLen === 0) return [counter, {}];
         let biggest = [0, 0];
         for (let i = 0; i < _tempColorLen; i++) {
             const _value = color[_tempColor[i]];
