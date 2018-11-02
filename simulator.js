@@ -18,6 +18,7 @@ export class Simulator {
                 const counter = this.neighborsCounter(lines[i], cols[k]);
             }
         }
+        return modList;
     }
     add (line, column, colour) {
         const cells = this._cells;
@@ -47,5 +48,14 @@ export class Simulator {
         if (this.isAlive(line+1, column  )) counter++;
         if (this.isAlive(line+1, column+1)) counter++;
         return counter;
+    }
+    willLive(counter, living) {
+        if (living) {
+            if (counter === 2 || counter === 3) return true;
+            return false;
+        } else {
+            if (counter === 3) return true;
+            return false;
+        }
     }
 }
