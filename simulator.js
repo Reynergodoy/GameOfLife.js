@@ -65,7 +65,7 @@ export class Simulator {
     }
     checkNeighbors (line, column, checked, list) {
         const points = [[line-1, column-1], [line-1, column], [line-1, column+1],
-                      [line, column-1]  , ----------------  [line, column+1],
+                      [line, column-1]  ,                   [line, column+1],
                       [line+1, column-1], [line+1, column], [line+1, column+1]];
         const _length = this._length;
         const _height = this._height;
