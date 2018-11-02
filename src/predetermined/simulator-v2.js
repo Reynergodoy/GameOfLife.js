@@ -1,4 +1,4 @@
-export class Simulator { // colors are predetermined by the highest amount of parents of given color
+class Simulator { // colors are predetermined by the highest amount of parents of given color
     constructor (height, length) {
         this._height = height;
         this._length = length;
