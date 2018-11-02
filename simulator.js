@@ -74,7 +74,7 @@ export class Simulator {
         const _height = this._height;
         for (let i = 0; i < 8; i++) {
             const point = points[i];
-            if (checked.indexOf(point[0] + " " + point[1])) continue;
+            if (checked.indexOf(point[0] + " " + point[1]) === -1) continue;
             checked.push(point[0] + " " + point[1]);
             if (this.isAlive(point[0], point[1])) continue;
             if (!this.willLive(this.neighborsCounter(point[0], point[1]), false)) continue;
