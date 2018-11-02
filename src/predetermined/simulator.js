@@ -8,7 +8,7 @@ export class Simulator { // colors are predetermined by the highest amount of pa
     
     simulate () {
         const modList = [];
-        const checkedNeighbors = []
+        const checkedNeighbors = {};
         const lines = Object.keys(this._cells);
         const linesLen = lines.length;
         if (linesLen === 0) return;
@@ -117,8 +117,9 @@ export class Simulator { // colors are predetermined by the highest amount of pa
         const _height = this._height;
         for (let i = 0; i < 8; i++) {
             const point = points[i];
-            if (checked.indexOf(point[0] + " " + point[1]) !== -1) continue;
-            checked.push(point[0] + " " + point[1]);
+            const pointString = point[0] + " " + point[1];
+            if (typeof checked[pointString] !== "undefined") continue;
+            checked[pointString] = 1;
             if (this.isAlive(point[0], point[1])) continue;
             const _counterColor = this.colorAndCounter(point[0], point[1]);
             if (!this.willLive(_counterColor[0], false)) continue;
