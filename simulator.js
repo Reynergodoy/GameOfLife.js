@@ -16,9 +16,10 @@ export class Simulator {
             const colsLen = cols.length;
             for (let k = 0; k < colsLen; k++) {
                 const counter = this.neighborsCounter(lines[i], cols[k]);
-                if (!this.willLive(counter, true)) modList.push([`${lines[i]} ${cols[k]}`, "delete"]);
+                if (!this.willLive(counter, true)) modList.push([lines[i] + " " + cols[k], "delete"]);
             }
         }
+        this.update(modList);
         return modList;
     }
     add (line, column, colour) {
@@ -31,7 +32,19 @@ export class Simulator {
             if (typeof this._cells[line][column] !== "undefined") delete this._cells[line][column];
     }
     update (data) {
-        
+        const len = data.length;
+        for(let i = 0; i < len; i++) {
+            const instructions = data[i];
+            const coords = instructions[0].split(" ");
+            if (i[1] === "delete") {
+                this.delete(coords[0], coords[1]);
+                continue;
+            } else if (i[1] === "add"){
+                this.add(coords[0], coords[1], instructions[2]);
+                continue;
+            }
+            continue;
+        }
     }
     isAlive (line, column) {
         if (typeof this._cells[line] !== "undefined")
@@ -63,7 +76,7 @@ export class Simulator {
             if (this.isAlive(point[0], point[1])) continue;
             if (!this.willLive(this.neighborsCounter(point[0], point[1]), false)) continue;
             if (point[0] < 0 || point[1] < 0 || point[0] >= _length || point[1] >= _height) continue;
-            list.push([point[0] + " " + point[1],'delete', '#d3d3d3'])
+            list.push([point[0] + " " + point[1], "add", '#'+ Math.floor(Math.random()*16777215).toString(16)]);
         }
     }
     willLive (counter, living) {
