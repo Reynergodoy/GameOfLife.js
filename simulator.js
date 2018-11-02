@@ -17,6 +17,7 @@ export class Simulator {
             for (let k = 0; k < colsLen; k++) {
                 const counter = this.neighborsCounter(lines[i], cols[k]);
                 if (!this.willLive(counter, true)) modList.push([lines[i] + " " + cols[k], "delete"]);
+                this.checkNeighbors(lines[i], cols[k], checkedNeighbors, modList);
             }
         }
         this.update(modList);
