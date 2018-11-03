@@ -2,12 +2,16 @@ export class Simulator { // colors are predetermined by the highest amount of pa
     constructor (height, length) {
         this._height = height;
         this._length = length;
-        // example cells => {"1":{"2":"#ff0000", "4":"#ff0000"}} => meaning 2 cells, one on line 1 column 2, the other on line 1 column 4
         this._cells = {};
+        this._colorAndCounterCache = {};
+        this._colorMap = {};
+        this._colorMapIndex = {};
     }
     
     simulate () {
-        const modList = [];
+        this._colorAndCounterCache = {};
+        const birthList = [];
+        const deathList = [];
         const lines = Object.keys(this._cells);
         const linesLen = lines.length;
         if (linesLen === 0) return;
@@ -18,18 +22,21 @@ export class Simulator { // colors are predetermined by the highest amount of pa
                 const line = parseInt(lines[i]);
                 const col = parseInt(cols[k]);
                 const counter = this.neighborsCounter(line, col);
-                if (!this.willLive(counter, true)) modList.push([line + " " + col, "delete"]);
-                this.checkNeighbors(line, col, modList);
+                if (!this.willLive(counter, true)) deathList.push([line, col]);
+                this.checkNeighbors(line, col, birthList);
             }
         }
-        this.update(modList);
-        return modList;
+        this.update(birthList, deathList);
     }
     
     add (line, column, colour) {
         const cells = this._cells;
         if (typeof cells[line] === "undefined") cells[line] = {};
-        cells[line][column] = colour;
+        if(typeof this._colorMap[colour] === "undefined"){
+            this._colorMap[colour] = Object.keys(this._colorMap).length + 1;
+            this._colorMapIndex[this._colorMap[colour]] = colour;
+        }
+        cells[line][column] = this._colorMap[colour];
     }
     
     delete (line, column) {
@@ -37,22 +44,26 @@ export class Simulator { // colors are predetermined by the highest amount of pa
             if (typeof this._cells[line][column] !== "undefined") delete this._cells[line][column];
     }
     
-    update (data) {
+    update (birthData, deathData) {
+        this.applyBirths(birthData);
+        this.applyDeaths(deathData);
+    }
+
+    applyBirths (data) {
         const len = data.length;
         for(let i = 0; i < len; i++) {
-            const instructions = data[i];
-            const coords = instructions[0].split(" ");
-            if (instructions[1] === "delete") {
-                this.delete(coords[0], coords[1]);
-                continue;
-            } else if (instructions[1] === "add"){
-                this.add(coords[0], coords[1], instructions[2]);
-                continue;
-            }
+            this.add(data[i][0], data[i][1], data[i][2]);
             continue;
         }
     }
-    
+
+    applyDeaths (data) {
+        const len = data.length;
+        for(let i = 0; i < len; i++) {
+            this.delete(data[i][0], data[i][1]);
+            continue;
+        }
+    }
     isAlive (line, column) {
         const _temp = this._cells[line]
         return _temp && (_temp[column] !== undefined);
@@ -60,24 +71,36 @@ export class Simulator { // colors are predetermined by the highest amount of pa
     
     getColor (line, column) {
         if (typeof this._cells[line] !== "undefined")
-            if(typeof this._cells[line][column] !== "undefined") return this._cells[line][column];
+            if(typeof this._cells[line][column] !== "undefined") return this._colorMapIndex[this._cells[line][column]];
         return false;
     }
     
     neighborsCounter (line, column) {
         let counter = 0;
-        if (this.isAlive(line-1, column-1)) counter++;
-        if (this.isAlive(line-1, column  )) counter++;
-        if (this.isAlive(line-1, column+1)) counter++;
-        if (this.isAlive(line  , column-1)) counter++;
-        if (this.isAlive(line  , column+1)) counter++;
-        if (this.isAlive(line+1, column-1)) counter++;
-        if (this.isAlive(line+1, column  )) counter++;
-        if (this.isAlive(line+1, column+1)) counter++;
+        const prevLine = this._cells[line-1];
+        const currLine = this._cells[line];
+        const nextLine = this._cells[line+1];
+        if(prevLine){
+            if (prevLine[column-1]) counter++;
+            if (prevLine[column  ]) counter++;
+            if (prevLine[column+1]) counter++;
+        }
+        if(currLine){
+            if (currLine[column-1]) counter++;
+            if (currLine[column+1]) counter++;
+        }
+        if(nextLine){
+            if (nextLine[column-1]) counter++;
+            if (nextLine[column  ]) counter++;
+            if (nextLine[column+1]) counter++;
+        }
         return counter;
     }
     
     colorAndCounter(line, column) {
+        if(this._colorAndCounterCache[line] && this._colorAndCounterCache[line][column]){
+            return this._colorAndCounterCache[line][column];
+        }
         const points = [[line-1, column-1], [line-1, column], [line-1, column+1],
                        [line, column-1]   ,                   [line, column+1],
                        [line+1, column-1] , [line+1, column], [line+1, column+1]];
@@ -98,16 +121,18 @@ export class Simulator { // colors are predetermined by the highest amount of pa
         const _tempColor = Object.keys(color);
         const _tempColorLen = _tempColor.length;
         if (_tempColorLen === 0) return [counter, {}];
-        let biggest = [0, 0];
+        const biggest = [0, 0];
         for (let i = 0; i < _tempColorLen; i++) {
             const _value = color[_tempColor[i]];
             if (biggest[0] < _value) biggest = [_value, i]
             continue;
         }
+        if(!this._colorAndCounterCache[line])this._colorAndCounterCache[line] = {};
+        this._colorAndCounterCache[line][column] = [counter, _tempColor[biggest[1]]];
         return [counter, _tempColor[biggest[1]]];
     }
     
-    checkNeighbors (line, column, list) {
+        checkNeighbors (line, column, list) {
         const points = [[line-1, column-1], [line-1, column], [line-1, column+1],
                        [line, column-1]   ,                   [line, column+1],
                        [line+1, column-1] , [line+1, column], [line+1, column+1]];
@@ -115,12 +140,11 @@ export class Simulator { // colors are predetermined by the highest amount of pa
         const _height = this._height;
         for (let i = 0; i < 8; i++) {
             const point = points[i];
-            const pointString = point[0] + " " + point[1];
             if (this.isAlive(point[0], point[1])) continue;
             const _counterColor = this.colorAndCounter(point[0], point[1]);
             if (!this.willLive(_counterColor[0], false)) continue;
             if (point[0] < 0 || point[1] < 0 || point[0] >= _height || point[1] >= _length) continue;
-            list.push([point[0] + " " + point[1], "add", _counterColor[1]]);
+            list.push([point[0], point[1], _counterColor[1]]);
         }
     }
     

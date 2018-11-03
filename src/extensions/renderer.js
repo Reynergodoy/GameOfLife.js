@@ -36,14 +36,16 @@ export class GameOfLife extends Simulator{
     outputLog () {
         const now = new Date().getTime();
         const fps = this._timestamps.filter((time) => time > now - 1000).length;
-        const cellCount = JSON.stringify(app._cells).split('rgb').length;
+        const cellStringify = JSON.stringify(app._cells);
+        const cleaned1 = cellStringify.split('{},').join('');
+        let cellCount = cleaned1.split(',').length - Object.keys(app._cells).length;
         this._log.innerHTML = `fps: <b>${fps}</b> --- cells: ${cellCount}`;
     }
     draw () {
         this._ctx.clearRect(0, 0, this._width, this._height);
         for(let y of Object.keys(this._cells)){
             for(let x of Object.keys(this._cells[y])){
-                this.drawCell(x * this._cellWidth, y * this._cellHeight, this._cells[y][x]);
+                this.drawCell(x * this._cellWidth, y * this._cellHeight, this.getColor(y,x));
             }
         }
         ++this._drawCount;
