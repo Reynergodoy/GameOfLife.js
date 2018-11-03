@@ -77,7 +77,7 @@ export class Simulator { // colors are predetermined by the highest amount of pa
         return counter;
     }
     
-    colorAndCounter(line, column) {for(var e=[[b-1,c-1],[b-1,c],[b-1,c+1],[b,c-1],[b,c+1],[b+1,c-1],[b+1,c],[b+1,c+1]],g=0,h={},d=0;8>d;d++){var a=e[d];this.isAlive(a[0],a[1])&&(a=this.getColor(a[0],a[1]),h[a]++,g++)}e=Object.keys(h);d=e.length;if(0===d)return[g,{}];a=[0,0];for(var f=0;f<d;f++){var k=h[e[f]];a[0]<k&&(a=[k,f])}return[g,e[a[1]]]};
+    colorAndCounter(b, c) {for(var e=[[b-1,c-1],[b-1,c],[b-1,c+1],[b,c-1],[b,c+1],[b+1,c-1],[b+1,c],[b+1,c+1]],g=0,h={},d=0;8>d;d++){var a=e[d];this.isAlive(a[0],a[1])&&(a=this.getColor(a[0],a[1]),h[a]++,g++)}e=Object.keys(h);d=e.length;if(0===d)return[g,{}];a=[0,0];for(var f=0;f<d;f++){var k=h[e[f]];a[0]<k&&(a=[k,f])}return[g,e[a[1]]]};
 
     
     
