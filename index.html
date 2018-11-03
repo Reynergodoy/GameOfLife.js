@@ -39,7 +39,7 @@
         <canvas id="c" style="border: 1px solid black;"></canvas>
     </div>
     <script>
-        (function initialize(){
+        function initialize(){
             const startingState = document.querySelector("#starting_state").value;
             if(window.app){
                 clearInterval(window.app._interval);
@@ -58,7 +58,8 @@
                     app.start();
                 })
                 ;
-        })();
+        }
+        initialize();
     </script>
 </body>
 </html>
