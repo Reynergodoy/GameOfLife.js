@@ -2,10 +2,10 @@
 <html>
 <head>
     <title>GAME OF LIFE</title>
-    <script src="data.js"></script>
-    <script src="entities.js"></script>
+    <script src="src/extensions/data.js"></script>
+    <script src="src/extensions/entities.js"></script>
     <script src="src/predetermined/simulator-v2.js"></script>
-    <script src="renderer.js"></script>
+    <script src="src/extensions/renderer.js"></script>
 </head>
 <body>
     <div id="controls">
@@ -19,7 +19,7 @@
         <canvas id="c" style="border: 1px solid black;"></canvas>
     </div>
     <script>
-        function initialize(){
+        (function initialize(){
             const startingState = document.querySelector("#starting_state").value;
             if(window.app){
                 clearInterval(window.app._interval);
@@ -36,8 +36,7 @@
             });
             app.addObject(g_data[startingState]);
             app.start();
-        }
-        initialize();
+        })();
     </script>
 </body>
 </html>
