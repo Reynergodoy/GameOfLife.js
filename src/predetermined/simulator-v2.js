@@ -77,35 +77,9 @@ export class Simulator { // colors are predetermined by the highest amount of pa
         return counter;
     }
     
-    colorAndCounter(line, column) {
-        const points = [[line-1, column-1], [line-1, column], [line-1, column+1],
-                       [line, column-1]   ,                   [line, column+1],
-                       [line+1, column-1] , [line+1, column], [line+1, column+1]];
-        let counter = 0;
-        const color = {};
-        for (let i = 0; i < 8; i++) {
-            let point = points[i];
-            if (this.isAlive(point[0], point[1])) {
-                const _temp = this.getColor(point[0], point[1]);
-                if (typeof color[_temp] === undefined) {
-                    color[_temp] = 1;
-                } else {
-                    color[_temp]++;
-                }
-                counter++;
-            }
-        }
-        const _tempColor = Object.keys(color);
-        const _tempColorLen = _tempColor.length;
-        if (_tempColorLen === 0) return [counter, {}];
-        let biggest = [0, 0];
-        for (let i = 0; i < _tempColorLen; i++) {
-            const _value = color[_tempColor[i]];
-            if (biggest[0] < _value) biggest = [_value, i]
-            continue;
-        }
-        return [counter, _tempColor[biggest[1]]];
-    }
+    colorAndCounter(line, column) {for(var e=[[b-1,c-1],[b-1,c],[b-1,c+1],[b,c-1],[b,c+1],[b+1,c-1],[b+1,c],[b+1,c+1]],g=0,h={},d=0;8>d;d++){var a=e[d];this.isAlive(a[0],a[1])&&(a=this.getColor(a[0],a[1]),h[a]++,g++)}e=Object.keys(h);d=e.length;if(0===d)return[g,{}];a=[0,0];for(var f=0;f<d;f++){var k=h[e[f]];a[0]<k&&(a=[k,f])}return[g,e[a[1]]]};
+
+    
     
     checkNeighbors (line, column, list) {
         const points = [[line-1, column-1], [line-1, column], [line-1, column+1],
