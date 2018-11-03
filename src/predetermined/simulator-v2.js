@@ -55,7 +55,7 @@ export class Simulator { // colors are predetermined by the highest amount of pa
     
     isAlive (line, column) {
         const _temp = this._cells[line]
-        return _temp && (_temp[column] !== 'undefined');
+        return _temp && (_temp[column] !== undefined);
     }
     
     getColor (line, column) {
