@@ -78,7 +78,7 @@ export class Simulator { // random colored
             checked.push(point[0] + " " + point[1]);
             if (this.isAlive(point[0], point[1])) continue;
             if (!this.willLive(this.neighborsCounter(point[0], point[1]), false)) continue;
-            if (point[0] < 0 || point[1] < 0 || point[0] >= _length || point[1] >= _height) continue;
+            if (point[0] < 0 || point[1] < 0 || point[0] >= _height || point[1] >= _length) continue;
             list.push([point[0] + " " + point[1], "add", '#'+ Math.floor(Math.random()*16777215).toString(16)]);
         }
     }
