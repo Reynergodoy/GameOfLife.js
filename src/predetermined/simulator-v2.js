@@ -120,7 +120,7 @@ export class Simulator { // colors are predetermined by the highest amount of pa
             if (this.isAlive(point[0], point[1])) continue;
             const _counterColor = this.colorAndCounter(point[0], point[1]);
             if (!this.willLive(_counterColor[0], false)) continue;
-            if (point[0] < 0 || point[1] < 0 || point[0] >= _length || point[1] >= _height) continue;
+            if (point[0] < 0 || point[1] < 0 || point[0] >= _height || point[1] >= _length) continue;
             list.push([point[0] + " " + point[1], "add", _counterColor[1]]);
         }
     }
