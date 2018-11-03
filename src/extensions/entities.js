@@ -14,7 +14,7 @@ function entity (str, xo = 0, yo = 0){
     while (i < cLen) {
         const x = i % sqrt;
         const y = Math.floor(i/sqrt);
-        if (clean[i]==="1") arr.push([x+xo,y+yo]);
+        if (clean[i] === "1") arr.push([x+xo,y+yo]);
         ++i;
     }
     return arr;
