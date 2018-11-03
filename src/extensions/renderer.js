@@ -1,16 +1,16 @@
-// import { Simulator } from "./src/predetermined/simulator-v2"; //TODO: idk why this isn't working
+// import { Simulator } from "./src/predetermined/simulator.js";
+import { Simulator } from "../predetermined/simulator-v2.js";
 
-class GameOfLife extends Simulator{
+export class GameOfLife extends Simulator{
     constructor (options) {
         super(options.height, options.width);
         this._height = options.height;
         this._width = options.width;
-        this._columnCount = options.columns;
-        this._rowCount = options.rows;
+        this._columnCount = options.columns ? options.columns : options.width;
+        this._rowCount = options.rows ? options.rows : options.height;
         this._speed = options.speed;
         this._cellHeight = this._height/this._rowCount;
         this._cellWidth = this._width/this._columnCount;
-        // example cells => {"1":{"2":"#ff0000", "4":"#ff0000"}} => meaning 2 cells, one on line 1 column 2, the other on line 1 column 4
         this._cells = {};
         this._log = options.log;
         this._timestamps = [];

@@ -4,8 +4,28 @@
     <title>GAME OF LIFE</title>
     <script src="src/extensions/data.js"></script>
     <script src="src/extensions/entities.js"></script>
-    <script src="src/predetermined/simulator-v2.js"></script>
-    <script src="src/extensions/renderer.js"></script>
+    <script src="src/predetermined/simulator-v2.js" type="module"></script>
+    <script src="src/extensions/renderer.js" type="module"></script>
+    <style>
+        #controls, #game{
+            position: fixed;
+        }
+        #controls{
+            top: 8px;
+            right: 8px;
+            height: 40px;
+            left: 8px;
+            border: 1px solid black;
+        }
+        #game{
+            top: 56px;
+            right: 8px;
+            bottom: 8px;
+            left: 8px;
+            border: 1px solid black;
+            overflow: scroll;
+        }
+    </style>
 </head>
 <body>
     <div id="controls">
@@ -25,17 +45,19 @@
                 clearInterval(window.app._interval);
                 document.querySelector("#log").innerHTML="fps: ...loading...";
             }
-            window.app = new GameOfLife({
-                height: 1700,
-                width: 1714,
-                columns: 1714,
-                rows: 1700,
-                speed: 60,
-                canvas: document.querySelector("#c"),
-                log: document.querySelector("#log")
-            });
-            app.addObject(g_data[startingState]);
-            app.start();
+            import("./src/extensions/renderer.js")
+                .then(function(renderer){
+                    window.app = new renderer.GameOfLife({
+                        height: g_startingStates[startingState].dimensions.height,
+                        width: g_startingStates[startingState].dimensions.width,
+                        speed: 60,
+                        canvas: document.querySelector("#c"),
+                        log: document.querySelector("#log")
+                    });
+                    app.addObject(g_startingStates[startingState].data);
+                    app.start();
+                })
+                ;
         })();
     </script>
 </body>
